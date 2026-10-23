@@ -147,3 +147,20 @@ Atores: **Caixa da barraca** (pessoa do curso que vende) e **Organização** (ad
 | RNF10 | Rastreabilidade do caixa | CT19 |
 | RNF11 | Compatibilidade da exportação | CT27 |
 | RNF12 | Privacidade (LGPD) | verificação de projeto (typecheck, testes automáticos, revisão) |
+
+## Módulo Segurança e controle de acesso
+
+| Código | Requisito | Descrição |
+|---|---|---|
+| RF-S01 | Grupos de usuários | O master cria, renomeia e apaga grupos (só sem usuários) e liga ou desliga cada funcionalidade do grupo. |
+| RF-S02 | Chaves de acesso | Cada grupo tem "Entrar no painel de cadastros" e "Entrar no caixa das barracas"; as funcionalidades dependentes só valem com a chave de acesso ligada. |
+| RF-S03 | Permissão no servidor | Toda rota da API confere a permissão do grupo; a tela só esconde botões por conveniência. |
+| RF-S04 | Gestão de usuários | Lista com busca, filtros, online agora e última atividade; editar nome e grupo, senha nova (encerra sessões), desconectar e excluir. |
+| RF-S05 | Senha do master | O master troca a própria senha informando a atual; as outras sessões dele são encerradas. |
+| RF-S06 | Barraca própria | O usuário é ligado a uma barraca e, com "Operar a própria barraca", vende e abre/fecha o caixa só dela com o próprio login. |
+| RF-S07 | Limpar tudo | Apaga cadastros, QR e todo o caixa (e, se marcado, os usuários), mantendo master, grupos e configurações. |
+| RNF-S01 | Ações críticas protegidas | Limpar tudo exige inscrições desligadas, senha do master com limite de tentativas, confirmação digitada e backup completo recente (ou ciência explícita). |
+| RNF-S02 | Atomicidade | A limpeza acontece numa única transação: ou apaga tudo, ou nada. |
+| RNF-S03 | Compatibilidade | Sem as migrações novas, o sistema funciona como antes (usuários mantêm o acesso padrão). |
+
+**Verificação:** testes automáticos para cada regra (permissões por grupo, dependência das chaves de acesso, rotas exclusivas do master, barraca própria e todas as recusas do "Limpar tudo"), além de testes no navegador com contas de cada grupo. Total do projeto: **421 testes automáticos aprovados**.

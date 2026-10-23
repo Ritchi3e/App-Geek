@@ -5,7 +5,7 @@
 ![TypeScript](https://img.shields.io/badge/TypeScript-3178C6?logo=typescript&logoColor=white)
 ![Node.js](https://img.shields.io/badge/Node.js-339933?logo=nodedotjs&logoColor=white)
 ![PostgreSQL](https://img.shields.io/badge/PostgreSQL-4169E1?logo=postgresql&logoColor=white)
-![Testes](https://img.shields.io/badge/testes-269_automáticos_+_28_casos-2ea44f)
+![Testes](https://img.shields.io/badge/testes-421_automáticos_+_28_casos-2ea44f)
 
 Sistema web full-stack criado para o **Geek Friday / HallowGeek** da Faculdade Uniguaçu. Ele resolve dois problemas do evento:
 
@@ -39,17 +39,33 @@ O painel mostra indicadores em tempo real, gráficos por tipo de participante e 
 |---|---|
 | ![Escolha do curso](docs/img/04-caixa-escolha-curso.png) | ![Central do caixa](docs/img/05-caixa-central.png) |
 
-**Venda, com comanda e troco sugerido em notas:**
+**Venda, com comanda, código de cada produto e troco sugerido em notas:**
 
 ![Tela de venda](docs/img/06-caixa-vender.png)
 
-**Turno de caixa:** abertura com fundo de troco, sangria e suprimento, fechamento com conferência da gaveta e relatórios guardados por turno.
+**Turno de caixa:** abertura com fundo de troco, relatórios guardados por turno, gráficos de vendas por forma de pagamento e por produto, sangria e suprimento, e fechamento com conferência da gaveta.
 
 ![Turno de caixa](docs/img/07-caixa-turno.png)
 
 | Recibo do turno (imprimir/PDF) | No celular |
 |---|---|
 | ![Recibo](docs/img/08-caixa-recibo.png) | ![Caixa no celular](docs/img/09-caixa-celular.png) |
+
+### Segurança e controle de acesso
+
+Área só do administrador *master*, com grupos de usuários e o que cada grupo pode fazer.
+
+| Permissões de um grupo | Barraca própria do usuário |
+|---|---|
+| ![Permissões do grupo](docs/img/10-seguranca-grupo.png) | ![Barraca própria](docs/img/13-barraca-propria.png) |
+
+**Usuários:** busca, filtros, quem está online, última atividade, editar, definir senha nova e excluir.
+
+![Usuários](docs/img/11-seguranca-usuarios.png)
+
+**Preparar o próximo evento:** limpa cadastros e caixa com senha do master, confirmação digitada e backup completo antes.
+
+![Limpar tudo](docs/img/12-limpar-tudo.png)
 
 ---
 
@@ -70,6 +86,16 @@ O painel mostra indicadores em tempo real, gráficos por tipo de participante e 
 - Turnos de caixa com fundo de troco, sangria e suprimento. No fechamento, o sistema calcula o esperado, recebe o valor contado e mostra a diferença.
 - Relatório de cada turno no formato de recibo (imprimir ou PDF) e exportação CSV compatível com o Excel.
 - Central da organização com o total do evento, as vendas por forma de pagamento e a situação de cada barraca.
+- Uma barraca por curso e período, com link de login próprio.
+- Código automático para cada produto (001, 002…), que aparece na venda, no recibo e no CSV.
+- Gráficos do turno: vendas por forma de pagamento (rosca) e por produto (barras).
+
+**Segurança e controle de acesso**
+- Grupos de usuários (ex.: Portaria, Coordenador, Professor, Aluno/Monitor) com cada funcionalidade ligada ou desligada pelo master.
+- Chaves de acesso por grupo: entrar no painel de cadastros e entrar no caixa das barracas.
+- Barraca própria: o usuário fica ligado a uma barraca e vende só nela, com o próprio login.
+- Gestão de usuários: online agora, última atividade, editar nome e grupo, senha nova (encerra as sessões), desconectar e excluir.
+- "Limpar tudo" para o próximo evento, com inscrições desligadas, senha do master, confirmação digitada e backup completo obrigatório (ou ciência explícita do risco).
 
 ## Arquitetura
 
@@ -93,6 +119,7 @@ flowchart LR
 - **O servidor é a fonte da verdade.** Preço, total, troco, estoque e saldo da gaveta são recalculados no servidor, com os dados do banco. O valor enviado pela tela nunca é usado.
 - **Dinheiro guardado em centavos (inteiros)**, para não ter erro de arredondamento. Venda, baixa de estoque e movimento de caixa são gravados juntos, numa única transação.
 - **Migrações SQL versionadas.** Por exemplo, um índice único parcial garante só um turno aberto por barraca.
+- **Compatível com o banco antigo.** O código detecta se cada migração nova já foi aplicada e, enquanto não foi, funciona como antes. Assim o site pode ser publicado antes de atualizar o banco, sem cair.
 
 ## Segurança
 
@@ -100,15 +127,19 @@ flowchart LR
 - **Limite de tentativas de login:** depois de 5 erros em 15 minutos, aquele login é bloqueado por 15 minutos.
 - **Conferência da origem** em toda requisição que altera dados, contra CSRF.
 - **Isolamento entre barracas:** cada curso só enxerga e altera o próprio caixa, e o servidor confere isso em todas as rotas.
+- **Permissões conferidas no servidor:** cada rota da API checa a permissão do grupo. Esconder um botão na tela não basta.
+- **Ações críticas só do master:** criar e excluir usuários, backup, limpeza e exclusão de barraca com histórico. Elas pedem a senha do master, com limite de tentativas.
+- **Limpeza em uma transação só:** ou apaga tudo, ou nada.
 - **CSV seguro:** a exportação neutraliza fórmulas maliciosas (*CSV injection*).
 - **Privacidade (LGPD):** o caixa não guarda nenhum dado pessoal.
 
 ## Qualidade e testes
 
-- **269 testes automáticos** (Node.js Test Runner), cobrindo regras de negócio, segurança e regressões.
+- **421 testes automáticos** (Node.js Test Runner), cobrindo regras de negócio, segurança, permissões por grupo e regressões.
 - **28 casos de teste do módulo de caixa**, ligados aos requisitos. Os casos CT01 a CT24 rodam por um roteiro automático contra a API, e os casos CT25 a CT28 foram executados no navegador. **Todos foram aprovados.**
 - Especificação completa com **20 requisitos funcionais, 12 não funcionais, 10 regras de negócio, 10 casos de uso** e matriz de rastreabilidade: 👉 [docs/requisitos-e-testes.md](docs/requisitos-e-testes.md)
-- Checagem de tipos com TypeScript no modo estrito.
+- Checagem de tipos com TypeScript no modo estrito e build de produção conferido antes de cada entrega.
+- Migrações testadas num banco vazio (instalação do zero) e num banco igual ao de produção (sem as migrações novas).
 
 ## Tecnologias
 
@@ -126,6 +157,9 @@ flowchart LR
 
 - Desenvolvimento do sistema de inscrições em grupo.
 - **Módulo Caixa das Barracas:** levantamento de requisitos, modelagem do banco (turnos, vendas, movimentos), API, telas e relatórios.
+- **Segurança e controle de acesso:** grupos e permissões verificadas no servidor, gestão de usuários, barraca própria e a limpeza para o próximo evento.
+- **Melhorias do caixa:** código automático dos produtos, gráficos do turno e reorganização dos relatórios.
+- **Integração em equipe:** entrega por *pull request*, juntando as minhas mudanças com as do colega (barracas por curso e período), resolvendo conflitos e corrigindo um erro de sintaxe numa migração.
 - **Qualidade:** especificação dos requisitos, casos de teste, roteiro de testes automatizados da API e matriz de rastreabilidade.
 - Artigo científico e banner apresentados no **VI Encontro de Pesquisa, Extensão e Inovação** da Uniguaçu.
 
