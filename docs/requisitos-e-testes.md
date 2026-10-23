@@ -158,9 +158,10 @@ Atores: **Caixa da barraca** (pessoa do curso que vende) e **Organização** (ad
 | RF-S04 | Gestão de usuários | Lista com busca, filtros, online agora e última atividade; editar nome e grupo, senha nova (encerra sessões), desconectar e excluir. |
 | RF-S05 | Senha do master | O master troca a própria senha informando a atual; as outras sessões dele são encerradas. |
 | RF-S06 | Barraca própria | O usuário é ligado a uma barraca e, com "Operar a própria barraca", vende e abre/fecha o caixa só dela com o próprio login. |
+| RF-S08 | Coordenador de curso | O usuário é ligado a um curso e, com "Coordenar as barracas do próprio curso", vê e opera todas as barracas desse curso (todos os períodos), sem o painel de cadastros; o servidor recusa as barracas dos outros cursos e as ações de organização. |
 | RF-S07 | Limpar tudo | Apaga cadastros, QR e todo o caixa (e, se marcado, os usuários), mantendo master, grupos e configurações. |
 | RNF-S01 | Ações críticas protegidas | Limpar tudo exige inscrições desligadas, senha do master com limite de tentativas, confirmação digitada e backup completo recente (ou ciência explícita). |
 | RNF-S02 | Atomicidade | A limpeza acontece numa única transação: ou apaga tudo, ou nada. |
 | RNF-S03 | Compatibilidade | Sem as migrações novas, o sistema funciona como antes (usuários mantêm o acesso padrão). |
 
-**Verificação:** testes automáticos para cada regra (permissões por grupo, dependência das chaves de acesso, rotas exclusivas do master, barraca própria e todas as recusas do "Limpar tudo"), além de testes no navegador com contas de cada grupo. Total do projeto: **421 testes automáticos aprovados**.
+**Verificação:** testes automáticos para cada regra (permissões por grupo, dependência das chaves de acesso, rotas exclusivas do master, barraca própria e todas as recusas do "Limpar tudo"), além de testes no navegador com contas de cada grupo. Total do projeto: **427 testes automáticos aprovados**.

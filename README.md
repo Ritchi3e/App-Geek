@@ -5,7 +5,7 @@
 ![TypeScript](https://img.shields.io/badge/TypeScript-3178C6?logo=typescript&logoColor=white)
 ![Node.js](https://img.shields.io/badge/Node.js-339933?logo=nodedotjs&logoColor=white)
 ![PostgreSQL](https://img.shields.io/badge/PostgreSQL-4169E1?logo=postgresql&logoColor=white)
-![Testes](https://img.shields.io/badge/testes-421_automáticos_+_28_casos-2ea44f)
+![Testes](https://img.shields.io/badge/testes-427_automáticos_+_28_casos-2ea44f)
 
 Sistema web full-stack criado para o **Geek Friday / HallowGeek** da Faculdade Uniguaçu. Ele resolve dois problemas do evento:
 
@@ -65,6 +65,14 @@ O painel mostra indicadores em tempo real, gráficos por tipo de participante e 
 |---|---|
 | ![Permissões do grupo](docs/img/10-seguranca-grupo.png) | ![Barraca própria](docs/img/13-barraca-propria.png) |
 
+**Coordenador de curso:** entra com o próprio login, não vê o painel de cadastros e cai direto nas barracas **do curso dele** (todos os períodos), com o total do curso e "Operar caixa" em cada barraca.
+
+![Coordenador de curso](docs/img/18-coordenador-curso.png)
+
+| Curso coordenado do usuário |
+|---|
+| ![Curso coordenado](docs/img/19-curso-coordenado.png) |
+
 **Usuários:** busca, filtros, quem está online, última atividade, editar, definir senha nova e excluir.
 
 ![Usuários](docs/img/11-seguranca-usuarios.png)
@@ -104,6 +112,7 @@ O painel mostra indicadores em tempo real, gráficos por tipo de participante e 
 - Grupos de usuários (ex.: Portaria, Coordenador, Professor, Aluno/Monitor) com cada funcionalidade ligada ou desligada pelo master.
 - Chaves de acesso por grupo: entrar no painel de cadastros e entrar no caixa das barracas.
 - Barraca própria: o usuário fica ligado a uma barraca e vende só nela, com o próprio login.
+- Coordenador de curso: o usuário fica ligado a um curso e vê e opera todas as barracas desse curso (todos os períodos), sem o painel de cadastros e sem as barracas dos outros cursos.
 - Gestão de usuários: online agora, última atividade, editar nome e grupo, senha nova (encerra as sessões), desconectar e excluir.
 - "Limpar tudo" para o próximo evento, com inscrições desligadas, senha do master, confirmação digitada e backup completo obrigatório (ou ciência explícita do risco).
 
@@ -146,7 +155,7 @@ flowchart LR
 
 ## Qualidade e testes
 
-- **421 testes automáticos** (Node.js Test Runner), cobrindo regras de negócio, segurança, permissões por grupo e regressões.
+- **427 testes automáticos** (Node.js Test Runner), cobrindo regras de negócio, segurança, permissões por grupo e regressões.
 - **28 casos de teste do módulo de caixa**, ligados aos requisitos. Os casos CT01 a CT24 rodam por um roteiro automático contra a API, e os casos CT25 a CT28 foram executados no navegador. **Todos foram aprovados.**
 - Especificação completa com **20 requisitos funcionais, 12 não funcionais, 10 regras de negócio, 10 casos de uso** e matriz de rastreabilidade: 👉 [docs/requisitos-e-testes.md](docs/requisitos-e-testes.md)
 - Checagem de tipos com TypeScript no modo estrito e build de produção conferido antes de cada entrega.
@@ -169,7 +178,7 @@ flowchart LR
 
 - Desenvolvimento do sistema de inscrições em grupo.
 - **Módulo Caixa das Barracas:** levantamento de requisitos, modelagem do banco (turnos, vendas, movimentos), API, telas e relatórios.
-- **Segurança e controle de acesso:** grupos e permissões verificadas no servidor, gestão de usuários, barraca própria e a limpeza para o próximo evento.
+- **Segurança e controle de acesso:** grupos e permissões verificadas no servidor, gestão de usuários, barraca própria, coordenador de curso e a limpeza para o próximo evento.
 - **Melhorias do caixa:** código automático dos produtos, gráficos do turno e reorganização dos relatórios.
 - **Integração em equipe:** entrega por *pull request*, juntando as minhas mudanças com as do colega (barracas por curso e período), resolvendo conflitos e corrigindo um erro de sintaxe numa migração.
 - **Qualidade:** especificação dos requisitos, casos de teste, roteiro de testes automatizados da API e matriz de rastreabilidade.
