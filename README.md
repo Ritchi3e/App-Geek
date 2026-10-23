@@ -190,6 +190,6 @@ Projeto acadêmico do curso de **Engenharia de Software — Faculdade Uniguaçu*
 
 - Gustavo Henrique Magagnin Silva
 - Lucas Vergopolan Proner
-- Mauricio Speth: publicação no Netlify com Supabase, integração do caixa ao projeto oficial, barracas por curso e período, gestão e exclusão de barracas pelo master, e a tela de entrada do QR
+- Mauricio Speth
 
 Orientação: Prof. Junior Mateus Peters
