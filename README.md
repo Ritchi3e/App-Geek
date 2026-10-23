@@ -20,9 +20,9 @@ Sistema web full-stack criado para o **Geek Friday / HallowGeek** da Faculdade U
 
 ### Inscrição do participante
 
-| QR Code dinâmico (telão do evento) | Cadastro no celular |
-|---|---|
-| ![QR Code dinâmico](docs/img/02-qr-code.png) | ![Cadastro no celular](docs/img/03-cadastro-celular.png) |
+| QR Code dinâmico (telão do evento) | Cadastro no celular | QR vencido ou já usado |
+|---|---|---|
+| ![QR Code dinâmico](docs/img/02-qr-code.png) | ![Cadastro no celular](docs/img/03-cadastro-celular.png) | ![QR Code expirado](docs/img/14-qr-expirado-celular.png) |
 
 O QR é trocado de tempos em tempos. Depois de lido, a pessoa tem 3 minutos para concluir o cadastro, e cada aparelho só cadastra uma vez.
 
@@ -46,6 +46,12 @@ O painel mostra indicadores em tempo real, gráficos por tipo de participante e 
 **Turno de caixa:** abertura com fundo de troco, relatórios guardados por turno, gráficos de vendas por forma de pagamento e por produto, sangria e suprimento, e fechamento com conferência da gaveta.
 
 ![Turno de caixa](docs/img/07-caixa-turno.png)
+
+**Gestão das barracas pela organização:** uma barraca por curso e período, e exclusão de barraca com histórico protegida por nome, senha do master e confirmação.
+
+| Nova barraca (curso e período) | Excluir com histórico |
+|---|---|
+| ![Nova barraca](docs/img/15-nova-barraca-periodo.png) | ![Excluir com histórico](docs/img/16-excluir-com-historico.png) |
 
 | Recibo do turno (imprimir/PDF) | No celular |
 |---|---|
@@ -75,6 +81,8 @@ O painel mostra indicadores em tempo real, gráficos por tipo de participante e 
 - QR Code dinâmico com validade configurável e token temporário assinado.
 - Cadastro de universitários (curso e período), professores e visitantes.
 - Bloqueio de cadastro duplicado por aparelho.
+- Validação do nome do participante (só letras, números e espaços) no servidor.
+- Tela de aviso no tema do evento quando o QR está vencido ou já foi usado.
 - Painel com gráficos, busca, filtros, edição e exportação CSV.
 - Vários administradores, com indicação de quem está online e um administrador *master*.
 - Backup e limpeza protegida dos dados ao fim do evento.
@@ -86,7 +94,9 @@ O painel mostra indicadores em tempo real, gráficos por tipo de participante e 
 - Turnos de caixa com fundo de troco, sangria e suprimento. No fechamento, o sistema calcula o esperado, recebe o valor contado e mostra a diferença.
 - Relatório de cada turno no formato de recibo (imprimir ou PDF) e exportação CSV compatível com o Excel.
 - Central da organização com o total do evento, as vendas por forma de pagamento e a situação de cada barraca.
-- Uma barraca por curso e período, com link de login próprio.
+- Uma barraca por curso e período, com link de login próprio. Barracas antigas continuam funcionando até o período ser definido.
+- Gestão das barracas pela organização: criar, editar curso, período e usuário, trocar a senha do curso e excluir. Barraca com vendas só sai com "Excluir com histórico", que pede o nome da barraca, a senha do master e a confirmação.
+- Controle de estoque opcional por produto.
 - Código automático para cada produto (001, 002…), que aparece na venda, no recibo e no CSV.
 - Gráficos do turno: vendas por forma de pagamento (rosca) e por produto (barras).
 
@@ -119,6 +129,7 @@ flowchart LR
 - **O servidor é a fonte da verdade.** Preço, total, troco, estoque e saldo da gaveta são recalculados no servidor, com os dados do banco. O valor enviado pela tela nunca é usado.
 - **Dinheiro guardado em centavos (inteiros)**, para não ter erro de arredondamento. Venda, baixa de estoque e movimento de caixa são gravados juntos, numa única transação.
 - **Migrações SQL versionadas.** Por exemplo, um índice único parcial garante só um turno aberto por barraca.
+- **Em produção na nuvem:** hospedado no **Netlify**, com o PostgreSQL gerenciado no **Supabase**, conexão com TLS e certificado validado.
 - **Compatível com o banco antigo.** O código detecta se cada migração nova já foi aplicada e, enquanto não foi, funciona como antes. Assim o site pode ser publicado antes de atualizar o banco, sem cair.
 
 ## Segurança
@@ -151,6 +162,7 @@ flowchart LR
 | Autenticação | scrypt, sessões no banco, cookies HTTP-only |
 | QR Code | `qrcode` + tokens temporários |
 | Testes | Node.js Test Runner, roteiro de testes de API, Playwright |
+| Hospedagem | Netlify (aplicação) e Supabase (PostgreSQL gerenciado, TLS) |
 | Ambiente | Docker (PostgreSQL), WSL, VS Code |
 
 ## Minha participação
@@ -169,6 +181,6 @@ Projeto acadêmico do curso de **Engenharia de Software — Faculdade Uniguaçu*
 
 - Gustavo Henrique Magagnin Silva
 - Lucas Vergopolan Proner
-- Mauricio Speth
+- Mauricio Speth: publicação no Netlify com Supabase, integração do caixa ao projeto oficial, barracas por curso e período, gestão e exclusão de barracas pelo master, e a tela de entrada do QR
 
 Orientação: Prof. Junior Mateus Peters
